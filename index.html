@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syllable Counter</title>
+</head>
+
+<body>
+
+    <textarea id="text-input" rows="10" cols="50" placeholder="Type here..."></textarea>
+    <pre id="output"></pre>
+
+    <script>
+        const textInput = document.getElementById("text-input");
+        const output = document.getElementById("output");
+
+        function countSyllables(word) {
+            word = word.toLowerCase();
+            const vowels = "aeiouy";
+
+            let count = vowels.includes(word[0]) ? 1 : 0;
+
+            for (let index = 1; index < word.length; index++) {
+                if (vowels.includes(word[index]) && !vowels.includes(word[index - 1])) {
+                    count++;
+                }
+            }
+
+            if (word.endsWith("e")) {
+                count--;
+            }
+
+            if (word.length < 1) {
+                count = 0;
+            }
+
+            return count > 0 ? count : 1;
+        }
+
+        textInput.addEventListener("input", function () {
+            const lines = textInput.value.split("\n");
+            let results = "";
+
+            for (let line of lines) {
+                const words = line.split(" ");
+                const totalSyllables = words.reduce((acc, word) => acc + countSyllables(word), 0);
+                results += `Line: "${line}" -> Syllables: ${totalSyllables}\n`;
+            }
+
+            output.textContent = results;
+        });
+    </script>
+</body>
+
+</html>
